@@ -50,8 +50,6 @@ spring:
           uri: lb://post-service
           predicates:
             - Path=/api/v1/posts/**,/api/v1/post/**
-          filters:
-            - JwtAuthentication
 
 eureka:
   client:
