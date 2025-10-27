@@ -11,8 +11,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    // API 경로 추출 (Vercel에서 /api로 시작하는 경로를 /api/proxy로 리라이트함)
-    let apiPath = req.url;
+    // URL 객체로 파싱하여 쿼리 파라미터 추출
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const path = url.searchParams.get('path');
+    
+    // 원본 API 경로 재구성
+    const apiPath = path ? `/api/${path}` : req.url;
     
     // API Gateway URL (MSA 구조)
     const apiGatewayUrl = `http://43.203.205.122:8080${apiPath}`;
