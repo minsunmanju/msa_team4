@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const apiPath = path ? `/api/${path}` : req.url;
     
     // API Gateway URL (MSA 구조)
-    const apiGatewayUrl = `http://43.203.205.122:8080${apiPath}`;
+    const apiGatewayUrl = `http://43.201.83.155:8080${apiPath}`;
 
     console.log(`Proxying ${req.method} ${req.url} -> ${apiGatewayUrl}`);
 
