@@ -66,7 +66,7 @@ public class Post {
     @Column(name = "tech")
     private List<String> techStack;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime deadline;
 
     @Enumerated(EnumType.STRING)
