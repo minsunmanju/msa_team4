@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     private boolean isPublicPath(String path) {
         return path.contains("/auth/") || 
                path.contains("/health") ||
-               path.equals("/api/v1/posts") ||
+               // POST 요청은 인증이 필요하므로 /api/v1/posts 제거
                path.contains("/api/v1/post/posts") ||
                path.contains("/api/v1/post/search") ||
                path.contains("/api/v1/users/signup") ||  // 회원가입 허용
