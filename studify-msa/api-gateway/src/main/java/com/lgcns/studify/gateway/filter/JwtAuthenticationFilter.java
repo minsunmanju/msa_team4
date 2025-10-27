@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 // 사용자 정보를 헤더에 추가
                 ServerHttpRequest modifiedRequest = request.mutate()
                     .header("X-User-Email", claims.getSubject())
-                    .header("X-User-ID", claims.get("userId", String.class))
+                    .header("X-User-Id", claims.get("userId", String.class))
                     .build();
                 
                 return chain.filter(exchange.mutate().request(modifiedRequest).build());

@@ -44,6 +44,18 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String createTokenWithUserId(String subject, Long userId, long validity) {
+        Date now = new Date();
+        Date exp = new Date(now.getTime() + validity);
+        return Jwts.builder()
+                .setSubject(subject)
+                .claim("userId", userId.toString())
+                .setIssuedAt(now)
+                .setExpiration(exp)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     public String getSubject(String token) {
         return Jwts.parser().verifyWith((javax.crypto.SecretKey) key).build()
                 .parseSignedClaims(token).getPayload().getSubject();
