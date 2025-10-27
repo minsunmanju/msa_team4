@@ -1,6 +1,19 @@
-# Getting Started with Create React App
+# Studify Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 🚀 개발 환경 설정
+
+### 1. 환경변수 설정
+```bash
+# .env.example을 복사해서 .env 파일 생성
+cp .env.example .env
+
+# .env 파일에서 EC2 IP 설정
+REACT_APP_API_URL=http://YOUR_EC2_IP:8088
+```
+
+### 2. Vercel 배포 시 환경변수 설정
+- Vercel Dashboard → Project → Settings → Environment Variables
+- `REACT_APP_API_URL` = `http://YOUR_EC2_IP:8088` 추가
 
 ## Available Scripts
 
