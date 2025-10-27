@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'cookierunfontRegular';
+  src: url('/font/CookieRunFont_TTF/CookieRun Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+@font-face {
+  font-family: 'cookierunfontBold';
+  src: url('/font/CookieRunFont_TTF/CookieRun Bold.ttf') format('truetype');
+  font-weight: bold;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    'cookierunfontRegular', 'cookierunfontBold', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
