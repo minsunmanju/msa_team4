@@ -24,11 +24,13 @@ import com.lgcns.studify.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 @Tag(name = "Post", description = "게시글 관리 API")
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -38,10 +40,17 @@ public class PostController {
     public ResponseEntity<?> register(@RequestBody PostRequestDTO request,
                                       @RequestHeader("X-User-Id") String userIdHeader) {
         try {
+            log.info("Post creation request - X-User-Id: {}, Request: {}", userIdHeader, request);
             Long authorId = Long.parseLong(userIdHeader);
             PostResponseDTO response = postService.createPost(request, authorId);
+            log.info("Post created successfully - ID: {}", response.getId());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (NumberFormatException e) {
+            log.error("Invalid X-User-Id format: {}", userIdHeader, e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("유효하지 않은 사용자 ID 형식입니다: " + userIdHeader);
         } catch (Exception e) {
+            log.error("Error creating post", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("게시글 작성 중 오류가 발생했습니다: " + e.getMessage());
         }
