@@ -13,11 +13,13 @@ import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAuthenticationFilter.Config> {
 
     @Value("${jwt.secret}")
@@ -34,13 +36,19 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             
             // 인증이 필요하지 않은 경로들
             String path = request.getURI().getPath();
+            log.info("JWT Filter - Processing request for path: {}", path);
+            
             if (isPublicPath(path)) {
+                log.info("JWT Filter - Public path, skipping authentication: {}", path);
                 return chain.filter(exchange);
             }
 
             // Authorization 헤더 확인
             String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+            log.info("JWT Filter - Authorization header: {}", authHeader != null ? "Bearer ***" : "null");
+            
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                log.warn("JWT Filter - Missing or invalid Authorization header for path: {}", path);
                 return onError(exchange, "Missing or invalid Authorization header", HttpStatus.UNAUTHORIZED);
             }
 
@@ -49,16 +57,20 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             try {
                 // JWT 토큰 검증
                 Claims claims = validateToken(token);
+                String userId = claims.get("userId", String.class);
+                log.info("JWT Filter - Token validated successfully, userId: {}", userId);
                 
                 // 사용자 정보를 헤더에 추가
                 ServerHttpRequest modifiedRequest = request.mutate()
                     .header("X-User-Email", claims.getSubject())
-                    .header("X-User-Id", claims.get("userId", String.class))
+                    .header("X-User-Id", userId)
                     .build();
                 
+                log.info("JWT Filter - Added headers X-User-Email: {}, X-User-Id: {}", claims.getSubject(), userId);
                 return chain.filter(exchange.mutate().request(modifiedRequest).build());
                 
             } catch (Exception e) {
+                log.error("JWT Filter - Token validation failed for path: {}, error: {}", path, e.getMessage());
                 return onError(exchange, "Invalid JWT token", HttpStatus.UNAUTHORIZED);
             }
         };
