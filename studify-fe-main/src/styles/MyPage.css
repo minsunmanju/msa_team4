@@ -1,0 +1,127 @@
+.mypage-posts-delete-btn {
+  background: none;
+  border: none;
+  color: #b91c1c;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0 8px;
+  margin-left: 12px;
+  border-radius: 0;
+  transition: color 0.15s;
+}
+.mypage-posts-delete-btn:hover {
+  color: #ef4444;
+  text-decoration: underline;
+}
+.mypage-posts-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  padding: 2px 0;
+  border-radius: 8px;
+  transition: background 0.13s;
+}
+.mypage-posts-link:hover {
+  background: #ede9fe;
+}
+.mypage-posts-box {
+  background: #f9fafb;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+.mypage-posts-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.mypage-posts-item {
+  padding: 18px 0 10px 0;
+  border-bottom: 1px solid #ececec;
+}
+.mypage-posts-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 4px;
+}
+.mypage-posts-meta {
+  color: #7c3aed;
+  font-size: 13px;
+}
+.mypage-menu {
+  min-width: 160px;
+  margin-right: 12px;
+}
+.mypage-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.mypage-menu li {
+  padding: 12px 18px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #444;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.mypage-menu li.active,
+.mypage-menu li:hover {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+.mypage-content {
+  flex: 1;
+  min-width: 0;
+}
+.mypage-save-row {
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 24px;
+}
+.mypage-save-btn {
+  min-width: 90px;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+}
+.mypage-save-btn:hover {
+  background: #1e40af;
+  color: #fff;
+}
+.mypage-footer-right {
+  justify-content: flex-end;
+}
+.mypage-main {
+  max-width: 900px;
+  margin: 40px auto;
+}
+.mypage-title {
+  margin-bottom: 32px;
+}
+.mypage-info-box {
+  background: #f9fafb;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+.mypage-info-item {
+  margin-bottom: 16px;
+}
+.mypage-footer {
+  justify-content: center;
+}
+.mypage-btn {
+  margin: 0 8px;
+}

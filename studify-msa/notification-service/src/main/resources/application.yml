@@ -1,0 +1,28 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: notification-service
+  datasource:
+    url: jdbc:mariadb://localhost:3306/studify_notifications
+    username: root
+    password: ""
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+logging:
+  level:
+    org.springframework.cloud.netflix.eureka: DEBUG
+    com.netflix.eureka: DEBUG
