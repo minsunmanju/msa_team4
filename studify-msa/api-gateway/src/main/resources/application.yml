@@ -50,7 +50,8 @@ spring:
           uri: lb://post-service
           predicates:
             - Path=/api/v1/posts/**,/api/v1/post/**
-          # StripPrefix=0 제거
+          filters:
+            - JwtAuthentication
 
 eureka:
   client:
