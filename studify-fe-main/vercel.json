@@ -1,5 +1,7 @@
 {
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "http://43.203.205.122:8080/api/$1" },
+    { "source": "/studify/(.*)", "destination": "http://43.203.205.122:8080/studify/$1" },
     { "source": "/(.*)", "destination": "/" }
   ]
 }
