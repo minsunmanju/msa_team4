@@ -1,0 +1,70 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      # CORS
+      globalcors:
+        add-to-simple-url-handler-mapping: true   # OPTIONS 프리플라이트 처리 필요 시
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "https://msa-red.vercel.app"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+      routes:
+        # User Service
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/api/v1/users/**,/api/auth/**
+          # StripPrefix=0 는 효과가 없으므로 제거
+
+        # Post Service (with /studify prefix → 내부 경로로 rewrite)
+        - id: post-service-studify
+          uri: lb://post-service
+          predicates:
+            - Path=/studify/api/v1/post/**
+          filters:
+            - RewritePath=/studify/(?<segment>.*),/${segment}
+
+        # Post Service (일반 경로)
+        - id: post-service
+          uri: lb://post-service
+          predicates:
+            - Path=/api/v1/posts/**,/api/v1/post/**
+          # StripPrefix=0 제거
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+    # 명시적으로 적고 싶으면 아래 두 줄 추가(기본값은 true)
+    # register-with-eureka: true
+    # fetch-registry: true
+  instance:
+    prefer-ip-address: true
+
+jwt:
+  secret: "change-me-please-very-long-secret-key-for-dev"
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG
+
