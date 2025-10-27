@@ -48,7 +48,7 @@ export default function SignIn() {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const login = () => api.post("/api/auth/login", form);
+  const login = () => api.post("/api/v1/auth/login", form);
 
   const onSubmit = async (e) => {
     e.preventDefault();
