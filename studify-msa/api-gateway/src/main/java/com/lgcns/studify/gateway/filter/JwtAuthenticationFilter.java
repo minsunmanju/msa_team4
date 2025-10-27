@@ -28,6 +28,11 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     public JwtAuthenticationFilter() {
         super(Config.class);
     }
+    
+    @Override
+    public String name() {
+        return "JwtAuthentication";
+    }
 
     @Override
     public GatewayFilter apply(Config config) {
