@@ -81,6 +81,13 @@ export default function Navbar() {
     if (!token || !userId) return;
 
     try {
+      // HTTPS 환경에서는 WebSocket 연결을 임시로 비활성화 (보안 제한으로 인해)
+      const isHttps = window.location.protocol === 'https:';
+      if (isHttps) {
+        console.log('WebSocket connection skipped in HTTPS environment for security reasons');
+        return;
+      }
+      
       const wsUrl = process.env.REACT_APP_WS_URL || 'http://localhost:8088/ws';
       const socket = new SockJS(wsUrl);
       

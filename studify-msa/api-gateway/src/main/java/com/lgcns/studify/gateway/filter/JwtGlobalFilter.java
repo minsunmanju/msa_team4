@@ -1,4 +1,4 @@
-package com.lgcns.studify.gateway.filter;
+package main.java.com.lgcns.studify.gateway.filter;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -31,11 +31,12 @@ public class JwtGlobalFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
         
         String path = request.getURI().getPath();
-        log.info("JWT Global Filter - Processing request for path: {}", path);
+        String method = request.getMethod().name();
+        log.info("JWT Global Filter - Processing request for path: {} method: {}", path, method);
         
         // 인증이 필요하지 않은 경로들
-        if (isPublicPath(path)) {
-            log.info("JWT Global Filter - Public path, skipping authentication: {}", path);
+        if (isPublicPath(path, method)) {
+            log.info("JWT Global Filter - Public path, skipping authentication: {} {}", method, path);
             return chain.filter(exchange);
         }
 
@@ -71,10 +72,12 @@ public class JwtGlobalFilter implements GlobalFilter, Ordered {
         }
     }
 
-    private boolean isPublicPath(String path) {
+    private boolean isPublicPath(String path, String method) {
         return path.contains("/auth/") || 
                path.contains("/health") ||
                path.contains("/api/v1/users/signup") ||  // 회원가입 허용
+               path.contains("/api/v1/auth/login") ||    // 로그인 허용
+               (path.equals("/api/v1/posts") && "GET".equals(method)) ||  // 게시글 목록 조회 허용 (GET만)
                path.contains("/ws/");
     }
 
