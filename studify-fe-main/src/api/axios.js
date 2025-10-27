@@ -4,7 +4,8 @@ import axios from "axios";
 // 환경에 따라 기본 URL 설정
 const getBaseURL = () => {
   if (process.env.NODE_ENV === 'production') {
-    return 'https://msa-red.vercel.app';
+    // 프로덕션에서는 vercel.json 프록시를 통해 상대 경로 사용
+    return '/api';
   }
   // 개발 환경에서는 API Gateway 직접 호출
   return 'http://localhost:8080';
@@ -12,7 +13,7 @@ const getBaseURL = () => {
 
 const api = axios.create({
   baseURL: getBaseURL(),
-  withCredentials: true,
+  withCredentials: false, // CORS 문제 해결을 위해 false로 변경
 });
 
 api.interceptors.request.use((config) => {

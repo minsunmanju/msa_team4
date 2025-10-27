@@ -17,6 +17,7 @@ spring:
           '[/**]':
             allowedOrigins:
               - "https://msa-red.vercel.app"
+              - "https://msateam4.vercel.app"
               - "http://localhost:3000"
               - "http://127.0.0.1:3000"
             allowedMethods:
@@ -28,7 +29,7 @@ spring:
               - PATCH
             allowedHeaders:
               - "*"
-            allowCredentials: true
+            allowCredentials: false
 
       routes:
         # User Service
