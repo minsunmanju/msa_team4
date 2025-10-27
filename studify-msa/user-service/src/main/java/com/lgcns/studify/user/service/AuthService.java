@@ -35,13 +35,13 @@ public class AuthService {
                 new UsernamePasswordAuthenticationToken(email, password)
         );
 
-        // 2) 토큰 발급
-        String accessToken = jwtTokenProvider.createAccessToken(email);
-        String refreshTokenStr = jwtTokenProvider.createRefreshToken(email);
-
         // 3) 유저 조회
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        // 2) 토큰 발급 (userId 포함)
+        String accessToken = jwtTokenProvider.createTokenWithUserId(email, user.getId(), 3600000L);
+        String refreshTokenStr = jwtTokenProvider.createRefreshToken(email);
 
         // 4) Refresh Token 저장 (유저당 1개 → 있으면 업데이트)
         RefreshToken refreshToken = refreshTokenRepository.findByUser(user)
@@ -65,8 +65,8 @@ public class AuthService {
             throw new IllegalArgumentException("리프레시 토큰이 만료되었습니다. 다시 로그인해주세요.");
         }
 
-        // 3) 새 Access Token 발급
-        String newAccessToken = jwtTokenProvider.createAccessToken(saved.getUser().getEmail());
+        // 3) 새 Access Token 발급 (userId 포함)
+        String newAccessToken = jwtTokenProvider.createTokenWithUserId(saved.getUser().getEmail(), saved.getUser().getId(), 3600000L);
 
         return new TokenResponse(newAccessToken, saved.getToken());
     }
