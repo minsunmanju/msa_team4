@@ -70,6 +70,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                path.equals("/api/v1/posts") ||
                path.contains("/api/v1/post/posts") ||
                path.contains("/api/v1/post/search") ||
+               path.contains("/api/v1/users/signup") ||  // 회원가입 허용
                path.contains("/ws/");
     }
 

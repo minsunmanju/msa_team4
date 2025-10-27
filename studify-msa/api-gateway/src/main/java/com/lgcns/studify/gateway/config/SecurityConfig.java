@@ -18,6 +18,8 @@ public class SecurityConfig {
                 .pathMatchers("/studify/**").permitAll()
                 .pathMatchers("/api/v1/posts/**").permitAll()
                 .pathMatchers("/api/v1/post/**").permitAll()
+                .pathMatchers("/api/v1/users/**").permitAll()  // 회원가입 허용
+                .pathMatchers("/api/v1/auth/**").permitAll()   // 인증 허용
                 .pathMatchers("/api/auth/**").permitAll()
                 .pathMatchers("/actuator/**").permitAll()
                 .anyExchange().authenticated()
