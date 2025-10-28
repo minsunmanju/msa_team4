@@ -41,7 +41,7 @@ spring:
         - id: post-service-studify
           uri: lb://post-service
           predicates:
-            - Path=/studify/api/v1/posts/**
+            - Path=/studify/api/v1/post/**
           filters:
             - RewritePath=/studify/(?<segment>.*),/${segment}
 
@@ -49,7 +49,7 @@ spring:
         - id: post-service
           uri: lb://post-service
           predicates:
-            - Path=/api/v1/posts/**
+            - Path=/api/v1/posts/**,/api/v1/post/**
 
 eureka:
   client:

@@ -126,8 +126,8 @@ export default function MyPage() {
           return;
         }
 
-        // 작성자별 글 가져오기 API 사용
-        const res = await api.get(`/studify/api/v1/posts/author/${myId}`, {
+        // 작성자별 글 가져오기 API 사용 (/studify prefix 제거)
+        const res = await api.get(`/api/v1/posts/author/${myId}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
