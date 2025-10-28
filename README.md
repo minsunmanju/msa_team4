@@ -90,7 +90,7 @@
 │        • 서비스 등록 & 상태 관리                              │
 │        • Health Check (30초마다)                            │
 │        • Dashboard: http://localhost:8761                   │
-└─────────────────────┬───────────────────────────────────────┘
+└─────────────────────┬────────────────────────────────
                       │ 등록된 서비스들
         ┌─────────────┼─────────────┬─────────────┐
         ▼             ▼             ▼             ▼
@@ -821,4 +821,46 @@ curl -X POST http://localhost:8080/api/v1/posts \
 
 - [ ] vercel에서 정상적으로 프론트엔드 화면이 나오는지 확인
 - [ ] EC2 환경에서 백엔드 서버가 정상적으로 작동 하는지 확인
+
+---
+
+## ⚡️ Studify MSA 전환 현황 및 구조 (2025.10 기준 최신)
+
+### ✅ MSA로 전환된 서비스
+- User Service (회원가입/로그인, JWT 인증)
+- Post Service (게시글 CRUD, 포지션/키워드/작성자별 검색)
+- Notification Service (기본 구조)
+- API Gateway, Eureka Server
+
+### ❗️ 모놀리식에 남아있는 기능
+- 댓글, 모집 마감, 신청(지원) 기능은 studify-be-main(모놀리식)에서만 제공
+- MSA(post-service)에는 댓글/마감/신청 API 없음
+
+### 📦 프로젝트 구조 (폴더 기준)
+```
+msa_team4/
+├── studify-msa/           # MSA 서비스 (user, post, notification, gateway, eureka)
+├── studify-fe-main/       # React 프론트엔드
+└── studify-be-main/       # 기존 모놀리식 백엔드 (댓글/마감/신청 등)
+```
+
+### 📝 주요 변경점/차이점
+- 기존 모놀리식(studify-be-main)에서 User, Post 서비스만 Spring Cloud 기반 MSA로 분리
+- 프론트엔드는 게시글/회원 등은 MSA API 사용, 댓글/마감/신청 등은 모놀리식 API 사용
+- 인프라 배포는 AWS EC2 + Nginx + Docker Compose
+- 담당자 및 역할 분담은 README 상단 표 참고
+
+### 🚩 현재 서비스별 기능 요약
+| 서비스         | 주요 기능                | 구현 위치         | 비고                |
+|----------------|-------------------------|-------------------|---------------------|
+| 회원/인증      | 회원가입, 로그인, JWT   | user-service (MSA)| 완전 전환           |
+| 게시글         | CRUD, 검색              | post-service (MSA)| 완전 전환           |
+| 댓글           | 등록/삭제/수정          | be-main(모놀리식) | MSA 미구현          |
+| 모집 마감      | 모집글 마감             | be-main(모놀리식) | MSA 미구현          |
+| 신청(지원)     | 모집글 지원/승인/거절   | be-main(모놀리식) | MSA 미구현          |
+| 알림           | 기본 구조               | notification(MSA) | 실제 기능 미구현     |
+
+---
+
+
 
