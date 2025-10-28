@@ -1,4 +1,4 @@
-package main.java.com.lgcns.studify.gateway.filter;
+package com.lgcns.studify.gateway.filter;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
