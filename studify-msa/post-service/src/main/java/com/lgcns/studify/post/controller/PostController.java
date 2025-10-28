@@ -43,7 +43,7 @@ public class PostController {
             log.info("Post creation request - X-User-Id: {}, Request: {}", userIdHeader, request);
             Long authorId = Long.parseLong(userIdHeader);
             PostResponseDTO response = postService.createPost(request, authorId);
-            log.info("Post created successfully - ID: {}", response.getId());
+            log.info("Post created successfully - ID: {}", response.getPostId());
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (NumberFormatException e) {
             log.error("Invalid X-User-Id format: {}", userIdHeader, e);
