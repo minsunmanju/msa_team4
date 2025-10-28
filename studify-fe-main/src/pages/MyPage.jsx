@@ -121,7 +121,10 @@ export default function MyPage() {
       setPostsLoading(true);
       try {
         const myId = localStorage.getItem("userId");
+        console.log("[MyPage] 내 userId:", myId);
+        
         if (!myId) {
+          console.log("[MyPage] userId 없음");
           setPosts([]);
           return;
         }
@@ -131,11 +134,18 @@ export default function MyPage() {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
+        console.log("[MyPage] 전체 글 응답:", res.data);
+        
         const list = Array.isArray(res?.data) ? res.data : (res?.data?.content || []);
+        console.log("[MyPage] 전체 글 목록:", list);
 
         // 내가 쓴 글만 필터링
-        const mine = list.filter((p) => String(p.authorId) === String(myId));
+        const mine = list.filter((p) => {
+          console.log(`[MyPage] 글 ${p.postId}: authorId=${p.authorId}, myId=${myId}, 일치=${String(p.authorId) === String(myId)}`);
+          return String(p.authorId) === String(myId);
+        });
 
+        console.log("[MyPage] 내가 쓴 글:", mine);
         setPosts(mine);
       } catch (err) {
         console.error("내 글 불러오기 실패", err);
