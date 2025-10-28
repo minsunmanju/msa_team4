@@ -126,14 +126,17 @@ export default function MyPage() {
           return;
         }
 
-        // 작성자별 글 가져오기 API 사용 (/studify prefix 제거)
-        const res = await api.get(`/api/v1/posts/author/${myId}`, {
+        // 모놀리식 백엔드 경로 사용
+        const res = await api.get("/studify/api/v1/post/posts", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
         const list = Array.isArray(res?.data) ? res.data : (res?.data?.content || []);
 
-        setPosts(list);
+        // 내가 쓴 글만 필터링
+        const mine = list.filter((p) => String(p.authorId) === String(myId));
+
+        setPosts(mine);
       } catch (err) {
         console.error("내 글 불러오기 실패", err);
         setPosts([]);
