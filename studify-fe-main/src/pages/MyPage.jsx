@@ -126,16 +126,14 @@ export default function MyPage() {
           return;
         }
 
-        // 전체 글 가져오기
-        const res = await api.get("/api/v1/posts", {
+        // 작성자별 글 가져오기 API 사용
+        const res = await api.get(`/studify/api/v1/posts/author/${myId}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
         const list = Array.isArray(res?.data) ? res.data : (res?.data?.content || []);
 
-        const mine = list.filter((p) => String(p.authorId) === String(myId));
-
-        setPosts(mine);
+        setPosts(list);
       } catch (err) {
         console.error("내 글 불러오기 실패", err);
         setPosts([]);
