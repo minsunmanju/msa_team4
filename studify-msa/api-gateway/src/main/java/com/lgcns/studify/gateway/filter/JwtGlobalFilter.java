@@ -73,12 +73,27 @@ public class JwtGlobalFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isPublicPath(String path, String method) {
-        return path.contains("/auth/") || 
-               path.contains("/health") ||
-               path.contains("/api/v1/users/signup") ||  // 회원가입 허용
-               path.contains("/api/v1/auth/login") ||    // 로그인 허용
-               (path.equals("/api/v1/posts") && "GET".equals(method)) ||  // 게시글 목록 조회 허용 (GET만)
-               path.contains("/ws/");
+        // 공통 공개 경로
+        if (path.contains("/auth/") ||
+            path.contains("/health") ||
+            path.contains("/api/v1/users/signup") ||  // 회원가입 허용
+            path.contains("/api/v1/auth/login") ||    // 로그인 허용
+            path.contains("/ws/")) {
+            return true;
+        }
+
+        // 게시글 조회는 GET 요청에 한해서 목록/상세 모두 허용
+        if ("GET".equals(method)) {
+            // 두 가지 라우트 패턴 모두 지원 (/api/v1/posts/**, /api/v1/post/**)
+            if (path.equals("/api/v1/posts") || path.startsWith("/api/v1/posts/")) {
+                return true;
+            }
+            if (path.equals("/api/v1/post") || path.startsWith("/api/v1/post/")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private Claims validateToken(String token) {
