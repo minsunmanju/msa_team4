@@ -20,18 +20,23 @@ export default async function handler(req, res) {
     const path = url.searchParams.get('path');
     
     // 원본 API 경로 재구성
-    // req.url이 이미 /api/v1/... 형태이므로 그대로 사용
     let apiPath;
     if (path) {
-      // 쿼리 파라미터로 path가 전달된 경우
-      apiPath = path.startsWith('/') ? path : `/${path}`;
+      // 쿼리 파라미터로 path가 전달된 경우 (vercel.json rewrite: /api/(.*) -> /api/proxy?path=$1)
+      // path는 이미 'v1/posts' 형태로 전달됨
+      apiPath = `/api/${path}`;
     } else {
       // 직접 경로로 요청된 경우 (예: /api/v1/posts)
       apiPath = url.pathname;
     }
     
+    // 쿼리 파라미터 제거 (path 파라미터는 이미 사용했으므로)
+    const queryParams = new URLSearchParams(url.search);
+    queryParams.delete('path');
+    const queryString = queryParams.toString();
+    
     // API Gateway URL (MSA 구조)
-    const apiGatewayUrl = `http://52.78.11.226:8080${apiPath}${url.search}`;
+    const apiGatewayUrl = `http://52.78.11.226:8080${apiPath}${queryString ? '?' + queryString : ''}`;
 
     console.log(`Proxying ${req.method} ${req.url} -> ${apiGatewayUrl}`);
 
