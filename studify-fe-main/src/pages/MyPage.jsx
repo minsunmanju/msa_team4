@@ -126,8 +126,8 @@ export default function MyPage() {
           return;
         }
 
-        // 모놀리식 백엔드 경로 사용
-        const res = await api.get("/studify/api/v1/post/posts", {
+        // MSA 백엔드: 전체 글 가져와서 필터링
+        const res = await api.get("/api/v1/posts", {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
 
