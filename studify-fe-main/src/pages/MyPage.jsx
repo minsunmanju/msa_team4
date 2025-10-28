@@ -20,25 +20,32 @@ function decodeJwtPayload(token = "") {
 }
 
 async function resolveUserIdByEmail(email, token) {
+  console.log("[resolveUserIdByEmail] 시작 - email:", email);
   let page = 0;
   const PAGE_SIZE = 100;
   while (page < 50) {
-    const res = await api.get("/studify/api/v1/users", {
+    const res = await api.get("/api/v1/users", {
       params: { page, size: PAGE_SIZE },
       headers: { Authorization: `Bearer ${token}` },
     });
+    console.log("[resolveUserIdByEmail] 페이지", page, "응답:", res.data);
+    
     const list = Array.isArray(res?.data)
       ? res.data
       : res?.data?.content || [];
     const me = list.find(
       (u) => (u?.email || "").toLowerCase() === email.toLowerCase()
     );
-    if (me?.id) return me.id;
+    if (me?.id) {
+      console.log("[resolveUserIdByEmail] 찾음! userId:", me.id);
+      return me.id;
+    }
 
     const last = Array.isArray(res?.data) ? true : !!res?.data?.last;
     if (last || list.length < PAGE_SIZE) break;
     page += 1;
   }
+  console.log("[resolveUserIdByEmail] 못 찾음");
   return null;
 }
 
@@ -86,10 +93,17 @@ export default function MyPage() {
 
   // userId 확인 , 닉네임 불러오기
   useEffect(() => {
+    console.log("[MyPage] userId 확인 effect - accessToken:", !!accessToken, "user.email:", user.email, "user.id:", user.id);
+    
     if (!accessToken || !user.email || user.id) return;
+    
+    console.log("[MyPage] userId 찾기 시작...");
+    
     (async () => {
       try {
         const foundId = await resolveUserIdByEmail(user.email, accessToken);
+        console.log("[MyPage] 찾은 userId:", foundId);
+        
         if (foundId) {
           localStorage.setItem("userId", String(foundId));
           setUser((u) => ({ ...u, id: foundId }));
@@ -106,6 +120,8 @@ export default function MyPage() {
               window.dispatchEvent(new Event("auth-changed"));
             }
           } catch (_) {}
+        } else {
+          console.warn("[MyPage] userId를 찾지 못했습니다");
         }
       } catch (e) {
         console.warn("[resolve userId failed]", e?.message);
