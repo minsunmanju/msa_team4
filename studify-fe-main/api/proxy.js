@@ -20,10 +20,18 @@ export default async function handler(req, res) {
     const path = url.searchParams.get('path');
     
     // 원본 API 경로 재구성
-    const apiPath = path ? `/api/${path}` : req.url;
+    // req.url이 이미 /api/v1/... 형태이므로 그대로 사용
+    let apiPath;
+    if (path) {
+      // 쿼리 파라미터로 path가 전달된 경우
+      apiPath = path.startsWith('/') ? path : `/${path}`;
+    } else {
+      // 직접 경로로 요청된 경우 (예: /api/v1/posts)
+      apiPath = url.pathname;
+    }
     
     // API Gateway URL (MSA 구조)
-    const apiGatewayUrl = `http://43.201.83.155:8080${apiPath}`;
+    const apiGatewayUrl = `http://52.78.11.226:8080${apiPath}${url.search}`;
 
     console.log(`Proxying ${req.method} ${req.url} -> ${apiGatewayUrl}`);
 
