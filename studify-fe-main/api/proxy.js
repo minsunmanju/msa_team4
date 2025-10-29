@@ -36,7 +36,7 @@ export default async function handler(req, res) {
     const queryString = queryParams.toString();
     
     // API Gateway URL (MSA 구조)
-    const apiGatewayUrl = `http://52.78.11.226:8080${apiPath}${queryString ? '?' + queryString : ''}`;
+    const apiGatewayUrl = `http://13.125.177.108:8080${apiPath}${queryString ? '?' + queryString : ''}`;
 
     console.log(`Proxying ${req.method} ${req.url} -> ${apiGatewayUrl}`);
 
